@@ -9,7 +9,9 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.*;
+
+public class MainActivity extends AppCompatActivity implements Observer{
     private TextView mTv;
 
     @Override
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mTv = getViewByID(R.id.tv);
         EventBus.getDefault().register(this);
+        Subject.getInstance().attach(this);
     }
 
     public <T extends View> T getViewByID(int id) {
@@ -25,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void myEvent(View v) {
-        EventBus.getDefault().post(new MsgEvent("Hello EventBus!"));
+//        EventBus.getDefault().post(new MsgEvent("Hello EventBus!"));
+        Subject.getInstance().post("liulihanhua....");
     }
 
     @Subscribe
@@ -37,5 +41,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        Subject.getInstance().dettach(this);
+    }
+
+    @Override
+    public void update(Object obj) {
+        mTv.setText(obj.toString());
     }
 }
