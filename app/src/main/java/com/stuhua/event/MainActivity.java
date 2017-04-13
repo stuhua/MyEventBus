@@ -1,5 +1,8 @@
 package com.stuhua.event;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,8 +14,11 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.*;
 
-public class MainActivity extends AppCompatActivity implements Observer{
+public class MainActivity extends AppCompatActivity implements Observer {
     private TextView mTv;
+
+    private static Handler sHandler = new Handler(Looper.getMainLooper()) {
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,5 +53,48 @@ public class MainActivity extends AppCompatActivity implements Observer{
     @Override
     public void update(Object obj) {
         mTv.setText(obj.toString());
+    }
+
+    /**
+     * Handler方法二：在线程中处理消息,使用handler.sendMessage 来发送消息
+     */
+    public void handlerMsg() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                sHandler = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                    }
+                };
+                Looper.loop();
+            }
+        }).start();
+    }
+
+    /**
+     * Handler方法一：使用post直接发送消息到主线程来更新UI， private static Handler sHandler = new Handler(Looper.getMainLooper()) {
+     *};
+     */
+    public void sendMsg() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                /**
+                 耗时操作
+                 */
+                sHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        /**
+                         更新UI
+                         */
+                        Toast.makeText(MainActivity.this, "更新UI", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
     }
 }
