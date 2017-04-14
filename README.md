@@ -4,7 +4,11 @@
 
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
 
-1. Android内部ContentObserver监听数据库的变化，使用了观察者模式
+- Android内部ContentObserver监听数据库的变化，使用了观察者模式
+
+- 函数响应式编程，RxJava
+
+- 事件驱动编程，EventBus
 
 # 演示
 
