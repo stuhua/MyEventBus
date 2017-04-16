@@ -15,3 +15,5 @@
 # 特点
 
 # CHANGELOG
+
+Fragment和Activity之间怎么通讯呢？
